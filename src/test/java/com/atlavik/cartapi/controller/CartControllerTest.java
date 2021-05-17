@@ -9,9 +9,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -55,14 +60,22 @@ public class CartControllerTest {
     @SneakyThrows
     @Test
     public void testGetCarts() {
-        MockHttpServletResponse response = mockMvc.perform(get("/api/carts")).andExpect(status().isOk()).andReturn().getResponse();
+        MockHttpServletResponse response = mockMvc.perform(get("/api/carts").param("apiKey", "zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx"))
+                .andExpect(status().isOk()).andReturn().getResponse();
         assertNotNull(response.toString());
+    }
+
+    @SneakyThrows
+    @Test
+    public void createCart_ShouldThrowExceptions_WhenApiKeyEmpty(){
+        mockMvc.perform(get("/api/carts")).andExpect(status().isForbidden());
     }
 
     @SneakyThrows
     @Test
     public void testGetCart() {
         MockHttpServletResponse response = mockMvc.perform(get("/api/carts")
+                .param("apiKey", "zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx")
                 .param("cartId", UUID.randomUUID().toString()))
                 .andExpect(status().isOk())
                 .andReturn()
@@ -88,6 +101,7 @@ public class CartControllerTest {
         cartRequest.setCurrency("US");
 
         mockMvc.perform(post("/api/carts").param("cartId", UUID.randomUUID().toString())
+                .param("apiKey", "zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.convertObjectToString(cartRequest)))
                 .andExpect(status().isNoContent());
@@ -97,7 +111,7 @@ public class CartControllerTest {
     @Test
     public void testGetProducts() {
         String uri = String.format("/api/carts/%s/products", UUID.randomUUID());
-        MockHttpServletResponse response = mockMvc.perform(get(uri))
+        MockHttpServletResponse response = mockMvc.perform(get(uri).param("apiKey", "zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx"))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse();
@@ -110,7 +124,7 @@ public class CartControllerTest {
     public void testGetProduct() {
         String uri = String.format("/api/carts/%1$s/products/%2$s", UUID.randomUUID(), UUID.randomUUID());
 
-        MockHttpServletResponse response = mockMvc.perform(get(uri))
+        MockHttpServletResponse response = mockMvc.perform(get(uri).param("apiKey", "zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx"))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse();
@@ -140,7 +154,8 @@ public class CartControllerTest {
         productRequest.setPrice(BigDecimal.ZERO);
         String uri = String.format("/api/carts/%s/products", UUID.randomUUID());
 
-        mockMvc.perform(put(uri).contentType(MediaType.APPLICATION_JSON).content(this.convertObjectToString(productRequest)))
+        mockMvc.perform(put(uri).param("apiKey", "zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx")
+                .contentType(MediaType.APPLICATION_JSON).content(this.convertObjectToString(productRequest)))
                 .andExpect(status().isNoContent());
     }
 
@@ -159,7 +174,7 @@ public class CartControllerTest {
 
         String uri = String.format("/api/carts/%1$s/products/%2$s", UUID.randomUUID(), UUID.randomUUID());
 
-        mockMvc.perform(delete(uri)).andExpect(status().isNoContent());
+        mockMvc.perform(delete(uri).param("apiKey", "zaCELgL.0imfnc8mVLWwsAawjYr4Rx-Af50DDqtlx")).andExpect(status().isNoContent());
     }
 
     private String convertObjectToString(Object obj) throws JsonProcessingException {

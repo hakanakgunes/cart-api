@@ -1,30 +1,59 @@
-# Atlavik Cart API Challenge
+#Cart API
 
 ## For Build maven command
 mvn clean install -X -f pom.xml
 
-## For start maven command
-mvn spring-boot:run
+## Copy cart-api-0.0.1-SNAPSHOT.jar file to under src/main/docker directory.
+cp target/cart-api-0.0.1-SNAPSHOT.jar src/main/docker
+
+## For start application
+docker compose-up
+
+## For stop application
+docker compose-down
 
 ## After run app for Swagger URL
-http://localhost:8082/swagger-ui.html for checking endpoints.
+GET http://localhost:8082/swagger-ui.html for checking endpoints.
 
-##Game Create URL
-http://<host>:<port>/games create new game and return game id.
+## APIKEY control and value
+Api-key store at application.propeties for this reason you have to set with this value or need to change from application.propeties.
+You should add every call this param ?apiKey=APIKEY( APIKEY value from properties).
 
-##Game Play URL
-http://<host>:<port>/games/{gameId}/pits/{pitId} play game url. Plus return board status.
+##Cart Create URL
+POST http://localhost:8082/api/carts?apiKey=APIKEY
+Add Request body json format.
+body instance: {
+"countryCode": "USA",
+"currency": "US"
+}
 
-##Game Play Rule
-When game created start Player first. And turn according to Kalah rules.
-Player first play with between 1 and 6.
-Player second play with between 8 and 13.
-Player can't play opponent pits kalah or undefined pit or get exceptions.
-When game is over api return 404 and give who wins information.
-When game is over you need to create new one for play again.
+##Get Carts URL
+GET http://localhost:8082/api/carts?apiKey=APIKEY
 
-## Application pit stones
-Stones number can change application.properties with stone-count.
+##Get Cart URL
+GET http://localhost:8082/api/carts/{cartId}?apiKey=APIKEY
 
-## Application storage info
-Application store in local cache. Expire time write after a hours and capacity is 100 games.
+##Add Product to Cart
+Get Specific cartId from Get Carts endpoint.
+PUT http://localhost:8082/api/carts/{cartId}/products?apiKey=APIKEY
+Add Request body json format.
+Body instance :
+{
+"description": "Apple Iphode 12",
+"category": "ELECTRONICS",
+"price": 3750.05
+}
+
+## Get Products
+Get Specific cartId from Get Carts endpoint.
+GET http://localhost:8082/api/carts/{cartId}/products?apiKey=APIKEY
+
+## Get Product
+Get Specific cartId from Get Carts endpoint.
+Get productId from Get Products endpoints.
+GET http://localhost:8082/api/carts/{cartId}/products/{productId}?apiKey=APIKEY
+
+##Delete Product
+Get Specific cartId from Get Carts endpoint.
+Get productId from Get Products endpoints.
+http://localhost:8082/api/carts/{cartId}/products/{productId}?apiKey=APIKEY

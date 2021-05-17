@@ -1,8 +1,8 @@
 package com.atlavik.cartapi.repository.impl;
 
+import com.atlavik.cartapi.exception.ProductException;
 import com.atlavik.cartapi.model.Product;
 import com.atlavik.cartapi.repository.CartRepositoryCustom;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -23,17 +23,20 @@ public class CartRepositoryCustomImpl implements CartRepositoryCustom {
 
 
     @Override
-    public Product getProduct(@Param("cartId") UUID cartId, @Param("productId") UUID productId) throws JsonProcessingException {
-        JsonNode product = (JsonNode) em.createNativeQuery(
-                "select product from cart, jsonb_array_elements(products) product where id= :cartId and product->>'id' = :productId")
-                .unwrap(NativeQuery.class)
-                .setParameter("cartId", cartId)
-                .setParameter("productId", productId.toString())
-                .addScalar("product", JsonNodeBinaryType.INSTANCE)
-                .getSingleResult();
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        return mapper.treeToValue(product, Product.class);
+    public Product getProduct(@Param("cartId") UUID cartId, @Param("productId") UUID productId) throws ProductException {
+        try {
+            JsonNode product = (JsonNode) em.createNativeQuery(
+                    "select product from cart, jsonb_array_elements(products) product where id= :cartId and product->>'id' = :productId")
+                    .unwrap(NativeQuery.class)
+                    .setParameter("cartId", cartId)
+                    .setParameter("productId", productId.toString())
+                    .addScalar("product", JsonNodeBinaryType.INSTANCE)
+                    .getSingleResult();
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            return mapper.treeToValue(product, Product.class);
+        } catch (Exception ex) {
+            throw new ProductException(ex.getMessage());
+        }
     }
 }

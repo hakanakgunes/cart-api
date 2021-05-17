@@ -8,6 +8,7 @@ import org.hibernate.annotations.Type;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Getter
@@ -31,6 +32,5 @@ public class Product implements Serializable {
         this.category = category;
         this.price = price;
         this.created = LocalDateTime.now();
-        this.updated = LocalDateTime.now();
     }
 }

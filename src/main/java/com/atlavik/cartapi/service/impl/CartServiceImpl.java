@@ -1,6 +1,7 @@
 package com.atlavik.cartapi.service.impl;
 
 import com.atlavik.cartapi.exception.CartNotFoundException;
+import com.atlavik.cartapi.exception.ProductException;
 import com.atlavik.cartapi.mapper.CartResponseMapper;
 import com.atlavik.cartapi.model.Cart;
 import com.atlavik.cartapi.model.Product;
@@ -51,7 +52,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public ProductResponse getProduct(UUID cartId, UUID productId) throws CartNotFoundException, JsonProcessingException {
+    public ProductResponse getProduct(UUID cartId, UUID productId) throws ProductException {
         return cartMapper.productToProductResponse(cartRepository.getProduct(cartId, productId));
     }
 

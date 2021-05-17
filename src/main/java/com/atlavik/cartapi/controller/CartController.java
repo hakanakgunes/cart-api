@@ -1,13 +1,11 @@
 package com.atlavik.cartapi.controller;
 
-import com.atlavik.cartapi.model.Cart;
-import com.atlavik.cartapi.model.Product;
+import com.atlavik.cartapi.exception.ProductException;
 import com.atlavik.cartapi.model.dto.CartRequest;
 import com.atlavik.cartapi.model.dto.CartResponse;
 import com.atlavik.cartapi.model.dto.ProductRequest;
 import com.atlavik.cartapi.model.dto.ProductResponse;
 import com.atlavik.cartapi.service.CartService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +48,7 @@ public class CartController {
 
     @GetMapping("/{cartId}/products/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    public ProductResponse getProduct(@PathVariable UUID cartId, @PathVariable UUID productId) throws JsonProcessingException {
+    public ProductResponse getProduct(@PathVariable UUID cartId, @PathVariable UUID productId) throws ProductException {
         return this.cartService.getProduct(cartId, productId);
     }
 
