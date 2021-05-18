@@ -9,7 +9,6 @@ import com.atlavik.cartapi.model.dto.CartResponse;
 import com.atlavik.cartapi.model.dto.ProductResponse;
 import com.atlavik.cartapi.repository.CartRepository;
 import com.atlavik.cartapi.service.CartService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

@@ -4,7 +4,6 @@ import com.atlavik.cartapi.exception.CartNotFoundException;
 import com.atlavik.cartapi.exception.ProductException;
 import com.atlavik.cartapi.model.dto.CartResponse;
 import com.atlavik.cartapi.model.dto.ProductResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.math.BigDecimal;
 import java.util.List;

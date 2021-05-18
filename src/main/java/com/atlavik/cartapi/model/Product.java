@@ -8,7 +8,6 @@ import org.hibernate.annotations.Type;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Getter

@@ -7,17 +7,17 @@ mvn clean install -X -f pom.xml
 cp target/cart-api-0.0.1-SNAPSHOT.jar src/main/docker
 
 ## For start application
-docker compose-up
+docker-compose up
 
 ## For stop application
-docker compose-down
+docker-compose down
 
 ## After run app for Swagger URL
 GET http://localhost:8082/swagger-ui.html for checking endpoints.
 
 ## APIKEY control and value
-Api-key store at application.propeties for this reason you have to set with this value or need to change from application.propeties.
-You should add every call this param ?apiKey=APIKEY( APIKEY value from properties).
+Api-key stored at application.propeties.
+You should add this param "?apiKey=APIKEY" at every call.
 
 ##Cart Create URL
 POST http://localhost:8082/api/carts?apiKey=APIKEY
